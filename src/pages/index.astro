@@ -1,48 +1,58 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body>
+	<body class="bg-[url('../../public/fondo-blanco-olivo.jpg')] bg-cover">
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
+			<h1 class="text-4xl font-semibold text-[#505846] text-balance">
+				Bienvenidos a mis rituales de bienestar
+			</h1>
+			<p class="mt-4">
+				Hola, soy Clara. Tengo 34 años y vivo en un pequeño pueblo de la
+				costa, donde el mar y los olivos son mis compañeros de vida.
+				Desde pequeña, aprendí a valorar el ritmo pausado de las mañanas
+				soleadas, el aroma de la sal marina y el sonido de las cigarras
+				al mediodía. Aquí, donde la vida parece detenerse, encontré el
+				espacio perfecto para crecer, reflexionar y disfrutar de lo
+				esencial.
 			</p>
 			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
+				Mi historia está marcada por el amor a la naturaleza y la
+				búsqueda constante de bienestar. Tras estudiar Biología en la
+				universidad, decidí que mi propósito era acercar la sabiduría
+				mediterránea a la vida cotidiana. Trabajé un tiempo en un centro
+				de educación ambiental, donde descubrí la importancia de
+				conectar con el entorno y transmitir el valor de la
+				sostenibilidad. Más tarde, me embarqué en un viaje por
+				diferentes regiones del Mediterráneo, aprendiendo de las
+				tradiciones, la gastronomía y los rituales de bienestar que se
+				han transmitido de generación en generación.
 			</p>
 			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
+				Uno de los hitos más importantes de mi vida fue la creación de
+				un pequeño huerto ecológico en mi casa. Allí cultivo hierbas
+				aromáticas, tomates y, por supuesto, olivos. Este rincón verde
+				se ha convertido en mi refugio, el lugar donde practico la
+				meditación y me reconecto conmigo misma. Además, he organizado
+				talleres de cocina saludable y mindfulness, compartiendo con mi
+				comunidad la importancia de cuidar tanto el cuerpo como la
+				mente.
 			</p>
+			<p>
+				Gracias por acompañarme en este viaje. Espero que mis palabras
+				te ayuden a encontrar tu propio ritmo y a conectar con la magia
+				del Mediterráneo.
+			</p>
+		
 		</main>
 		<Footer />
 	</body>
