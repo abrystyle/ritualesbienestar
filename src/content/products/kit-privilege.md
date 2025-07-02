@@ -9,16 +9,16 @@ productUrl: "https://www.evergreenlife.it/es_es/kit-privilege-1.html"
 availability: "available"
 inStock: true
 category: "Kits"
-tags: []
+tags: ["Premium"]
 sku: "KITPRI-ES"
-createdAt: "2025-07-02T07:22:10.809Z"
+createdAt: "2025-07-02T11:32:35.885Z"
 seoTitle: "KIT PRIVILEGE - EverGreen Life"
 seoDescription: "Compra KIT PRIVILEGE de EverGreen Life."
 ---
 
 # KIT PRIVILEGE
 
-KIT PRIVILEGE de EverGreen Life. Producto de alta calidad de la línea Kits.
+Compartir producto:
 
 ## Información del Producto
 
@@ -27,13 +27,50 @@ KIT PRIVILEGE de EverGreen Life. Producto de alta calidad de la línea Kits.
 - **Marca:** EverGreen Life
 - **SKU:** KITPRI-ES
 - **Categoría:** Kits
+
 - **Disponibilidad:** Disponible
 
 [Ver producto en la tienda oficial](https://www.evergreenlife.it/es_es/kit-privilege-1.html)
 
-## Características
+## Características principales
+
+- Premium
+
+
+
+
+## Descripción
 
 Este producto forma parte de la línea Kits de EverGreen Life, reconocida por su calidad y efectividad.
+
+
+## Información adicional
+
+Compartir producto:
+
+
+
+
+
+
+
+
+
+
+
+    // require([
+    // 'jquery', // jquery Library
+    // 'mage/translate' // Magento text translate (Validation message translte as per language)
+    // ], function ($, $t, _) {
+
+    //     $(document).ready(function() {
+            
+    //         $('.evergreen-clip-button-product').on('click', function(e){
+    //             e.preventDefault();
+    //             let currentURL = window.location.href;
+
+    //             //add referral if exists
+    //         ...
 
 ---
 

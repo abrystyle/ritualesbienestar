@@ -1,0 +1,50 @@
+[build]
+  command = "pnpm build"
+  functions = "netlify/functions"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--version" # Forzar el uso de pnpm
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/productos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, s-maxage=7200"
+
+[[redirects]]
+  from = "/api/products"
+  to = "/.netlify/functions/update-products"
+  status = 200
+
+[[redirects]]
+  from = "/api/build"
+  to = "/.netlify/functions/trigger-build"
+  status = 200
+
+[[redirects]]
+  from = "/api/daily"
+  to = "/.netlify/functions/daily-update"
+  status = 200
+
+# Scheduled function para ejecutar diariamente a las 6:00 AM UTC
+[[functions]]
+  path = "/.netlify/functions/daily-update"
+  schedule = "0 6 * * *"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[dev]
+  framework = "#static"
+  command = "pnpm dev"
+  targetPort = 4321

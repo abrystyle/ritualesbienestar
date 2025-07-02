@@ -28,6 +28,9 @@ const products = defineCollection({
 		category: z.string().optional(),
 		tags: z.array(z.string()).default([]),
 		
+		// Información del paquete
+		packageSize: z.string().optional(),
+		
 		// Información adicional
 		rating: z.number().min(0).max(5).optional(),
 		discount: z.string().optional(),

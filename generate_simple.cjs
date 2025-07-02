@@ -34,6 +34,42 @@ try {
             .replace(/^-|-$/g, '');
     }
     
+    // Función para limpiar y filtrar tags
+    function cleanTags(tags) {
+        if (!Array.isArray(tags)) return [];
+        
+        const unwantedTags = [
+            'search', 'lenguaje', 'cantidad', 'inscríbase', 'compartir', 'boletín',
+            'package weight', 'ml', 'javascript', 'require', 'window', 'document',
+            'alert', 'clipboard', 'whatsapp', 'mailto', 'kg', 'g', 'kg'
+        ];
+        
+        const goodTags = [
+            'objetivos', 'métodos de uso', 'ingredientes', 'beneficios', 
+            'características', 'propiedades', 'antioxidante', 'natural',
+            'vitaminas', 'minerales', 'colágeno', 'detox', 'energía',
+            'bienestar', 'salud', 'suplemento', 'crema', 'gel', 'serum',
+            'anticellulite', 'antiage', 'hidratante', 'nutritivo'
+        ];
+        
+        return tags
+            .filter(tag => {
+                if (!tag || typeof tag !== 'string') return false;
+                const lowTag = tag.toLowerCase().trim();
+                
+                // Excluir tags no deseados
+                if (unwantedTags.some(unwanted => lowTag.includes(unwanted))) return false;
+                
+                // Incluir solo tags útiles o que contengan palabras clave
+                return goodTags.some(good => lowTag.includes(good)) || 
+                       (lowTag.length > 3 && lowTag.length < 30 && 
+                        !lowTag.includes(':') && !lowTag.includes('(') && 
+                        !lowTag.includes('€') && !lowTag.includes('ml'));
+            })
+            .map(tag => tag.trim())
+            .slice(0, 5); // Limitar a máximo 5 tags
+    }
+    
     // Función para categorizar
     function getCategory(productName) {
         const name = productName.toLowerCase();
@@ -50,7 +86,46 @@ try {
         
         return 'Suplementos';
     }
+
+    // Función para extraer información de peso/tamaño
+    function extractSizeInfo(tags, description) {
+        let sizeInfo = '';
+        
+        // Buscar en tags
+        const sizeTag = tags.find(tag => 
+            tag && (tag.includes('ml') || tag.includes('g ') || tag.includes('kg'))
+        );
+        if (sizeTag) sizeInfo = sizeTag;
+        
+        // Si no encuentra en tags, buscar en descripción
+        if (!sizeInfo && description) {
+            const sizeMatch = description.match(/\d+\s*(ml|g|kg)/i);
+            if (sizeMatch) sizeInfo = sizeMatch[0];
+        }
+        
+        return sizeInfo;
+    }
     
+    // Función para extraer beneficios de la descripción
+    function extractBenefits(description) {
+        if (!description) return [];
+        
+        const benefitKeywords = [
+            'energía', 'vitalidad', 'bienestar', 'salud', 'antioxidante',
+            'hidratante', 'nutritivo', 'antiedad', 'colágeno', 'vitaminas',
+            'detox', 'drenante', 'quema grasa', 'anticellulite'
+        ];
+        
+        const benefits = [];
+        benefitKeywords.forEach(keyword => {
+            if (description.toLowerCase().includes(keyword)) {
+                benefits.push(keyword.charAt(0).toUpperCase() + keyword.slice(1));
+            }
+        });
+        
+        return [...new Set(benefits)].slice(0, 3);
+    }
+
     // Generar archivos
     let count = 0;
     for (const product of jsonData.products) {
@@ -62,6 +137,14 @@ try {
             const availability = product.availability && product.availability.includes('No está disponible') ? 'unavailable' : 'available';
             const inStock = !product.availability || !product.availability.includes('No está disponible');
             const category = getCategory(product.name);
+            
+            // Procesar tags y extraer información adicional
+            const cleanedTags = cleanTags(product.tags || []);
+            const benefits = extractBenefits(product.detailedDescription);
+            const sizeInfo = extractSizeInfo(product.tags || [], product.detailedDescription);
+            
+            // Combinar tags limpios con beneficios
+            const allTags = [...new Set([...cleanedTags, ...benefits])].slice(0, 5);
             
             // Construir frontmatter
             const frontmatter = [];
@@ -81,7 +164,11 @@ try {
             frontmatter.push(`availability: "${availability}"`);
             frontmatter.push(`inStock: ${inStock}`);
             frontmatter.push(`category: "${category}"`);
-            frontmatter.push(`tags: []`);
+            frontmatter.push(`tags: [${allTags.map(tag => `"${tag}"`).join(', ')}]`);
+            
+            if (sizeInfo) {
+                frontmatter.push(`packageSize: "${sizeInfo}"`);
+            }
             
             if (product.sku) {
                 frontmatter.push(`sku: "${product.sku}"`);
@@ -97,7 +184,10 @@ ${frontmatter.join('\n')}
 
 # ${product.name}
 
-${product.name} de EverGreen Life. Producto de alta calidad de la línea ${category}.
+${product.detailedDescription ? 
+  product.detailedDescription.split('\n')[0].replace('Descripción', '').trim() :
+  `${product.name} de EverGreen Life. Producto de alta calidad de la línea ${category}.`
+}
 
 ## Información del Producto
 
@@ -105,13 +195,31 @@ ${product.name} de EverGreen Life. Producto de alta calidad de la línea ${categ
 - **Marca:** EverGreen Life
 ${product.sku ? `- **SKU:** ${product.sku}` : ''}
 - **Categoría:** ${category}
+${sizeInfo ? `- **Tamaño:** ${sizeInfo}` : ''}
 - **Disponibilidad:** ${availability === 'available' ? 'Disponible' : 'No disponible'}
 
 ${product.link ? `[Ver producto en la tienda oficial](${product.link})` : ''}
 
-## Características
+${allTags.length > 0 ? `## Características principales
+
+${allTags.map(tag => `- ${tag}`).join('\n')}
+` : ''}
+
+${product.detailedDescription && product.detailedDescription.includes('objetivos') ? `## Objetivos
+
+${product.detailedDescription.split('objetivos')[1] ? 
+  product.detailedDescription.split('objetivos')[1].split('métodos de uso')[0].trim() : 
+  'Apoyar el bienestar general y la salud.'
+}
+` : ''}
+
+## Descripción
 
 Este producto forma parte de la línea ${category} de EverGreen Life, reconocida por su calidad y efectividad.
+
+${product.detailedDescription && product.detailedDescription.length > 200 ? 
+  `\n## Información adicional\n\n${product.detailedDescription.substring(0, 500)}...` : ''
+}
 
 ---
 

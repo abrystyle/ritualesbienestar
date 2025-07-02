@@ -2,6 +2,130 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import fs from 'fs';
 
+// Función para extraer información detallada de cada producto
+async function scrapeProductDetails(productUrl) {
+    try {
+        console.log(`  📄 Analizando: ${productUrl}`);
+        const response = await axios.get(productUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        });
+        
+        const $ = cheerio.load(response.data);
+        
+        const details = {
+            tags: [],
+            description: '',
+            features: [],
+            ingredients: []
+        };
+        
+        // Extraer tags/etiquetas más específicos
+        const specificTagSelectors = [
+            '.product-specifications .spec-value',
+            '.product-benefits li',
+            '.product-features li',
+            '.product-advantages li',
+            '.objetivos p',
+            '.beneficios li',
+            '.caracteristicas li'
+        ];
+        
+        // Buscar tags en descripciones estructuradas
+        const descriptionText = $('.product-description, .description, .tab-content').text();
+        
+        // Extraer beneficios y características de la descripción
+        const benefitKeywords = [
+            'energía', 'vitalidad', 'bienestar', 'antioxidante', 'natural',
+            'vitaminas', 'minerales', 'suplemento', 'salud', 'nutrición',
+            'inmunológico', 'digestivo', 'colágeno', 'antiedad', 'hidratante',
+            'drenante', 'detox', 'metabolismo', 'proteína', 'aminoácidos'
+        ];
+        
+        benefitKeywords.forEach(keyword => {
+            if (descriptionText.toLowerCase().includes(keyword.toLowerCase())) {
+                details.tags.push(keyword.charAt(0).toUpperCase() + keyword.slice(1));
+            }
+        });
+        
+        // Extraer de selectores específicos
+        specificTagSelectors.forEach(selector => {
+            $(selector).each((i, el) => {
+                const tagText = $(el).text().trim();
+                if (tagText && tagText.length > 2 && tagText.length < 30) {
+                    details.tags.push(tagText);
+                }
+            });
+        });
+        
+        // Extraer tags del nombre del producto
+        const productName = $('.product-item-name, .page-title, h1').first().text().trim();
+        if (productName) {
+            if (productName.toLowerCase().includes('collagen')) details.tags.push('Colágeno');
+            if (productName.toLowerCase().includes('protein')) details.tags.push('Proteína');
+            if (productName.toLowerCase().includes('golden')) details.tags.push('Premium');
+            if (productName.toLowerCase().includes('detox')) details.tags.push('Detox');
+            if (productName.toLowerCase().includes('drenante')) details.tags.push('Drenante');
+            if (productName.toLowerCase().includes('anticellulite')) details.tags.push('Anticelulítico');
+            if (productName.toLowerCase().includes('brucia grassi')) details.tags.push('Quema grasas');
+            if (productName.toLowerCase().includes('crema')) details.tags.push('Cosmético');
+            if (productName.toLowerCase().includes('gel')) details.tags.push('Cosmético');
+            if (productName.toLowerCase().includes('siero')) details.tags.push('Serum');
+        }
+        
+        // Extraer descripción mejorada
+        const descriptionSelectors = [
+            '.product-description',
+            '.description',
+            '.product-details',
+            '.product-info',
+            '.product-content',
+            '[class*="description"]'
+        ];
+        
+        for (const selector of descriptionSelectors) {
+            const desc = $(selector).first().text().trim();
+            if (desc && desc.length > details.description.length) {
+                details.description = desc;
+            }
+        }
+        
+        // Extraer características/beneficios
+        $('.benefits li, .features li, .characteristics li').each((i, el) => {
+            const feature = $(el).text().trim();
+            if (feature && feature.length > 0 && feature.length < 100) {
+                details.features.push(feature);
+            }
+        });
+        
+        // Limpiar y deduplicar tags
+        details.tags = [...new Set(details.tags.filter(tag => 
+            tag.length > 2 && 
+            tag.length < 30 &&
+            !tag.includes('€') && 
+            !tag.includes('img') &&
+            !tag.includes('ml') &&
+            !tag.includes('Package') &&
+            !tag.includes('Search') &&
+            !tag.includes('Lenguaje') &&
+            !tag.includes('Cantidad') &&
+            !tag.includes('Inscríbase') &&
+            !tag.includes('boletín') &&
+            !tag.toLowerCase().includes('añadir') &&
+            !tag.toLowerCase().includes('comprar') &&
+            !tag.toLowerCase().includes('método') &&
+            !tag.toLowerCase().includes('ingrediente')
+        ))].slice(0, 8); // Limitar a 8 tags máximo
+        
+        return details;
+        
+    } catch (error) {
+        console.log(`    ❌ Error al analizar ${productUrl}: ${error.message}`);
+        return { tags: [], description: '', features: [], ingredients: [] };
+    }
+}
+
 async function scrapeEvergreenProducts() {
     try {
         console.log('Iniciando scraping de https://www.evergreenlife.it/es_es/shop.html...');
@@ -151,6 +275,24 @@ async function scrapeEvergreenProducts() {
         }
         
         console.log(`Se encontraron ${products.length} productos`);
+        
+        // Enriquecer cada producto con información detallada
+        console.log('\n🔍 Analizando páginas individuales de productos...');
+        for (let i = 0; i < products.length; i++) {
+            const product = products[i];
+            if (product.link) {
+                console.log(`\n${i + 1}/${products.length} - ${product.name}`);
+                const details = await scrapeProductDetails(product.link);
+                
+                // Agregar información detallada al producto
+                products[i].tags = details.tags;
+                products[i].detailedDescription = details.description;
+                products[i].features = details.features;
+                
+                // Pequeña pausa para no sobrecargar el servidor
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        }
         
         // Guardar en archivo JSON
         const jsonData = {
