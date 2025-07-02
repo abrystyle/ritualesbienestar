@@ -34,6 +34,147 @@ try {
             .replace(/^-|-$/g, '');
     }
     
+    // Función para limpiar y escapar texto para YAML
+    function cleanTextForYAML(text) {
+        if (!text || typeof text !== 'string') return '';
+        
+        return text
+            .replace(/"/g, '\\"')           // Escapar comillas dobles
+            .replace(/\n/g, ' ')           // Reemplazar saltos de línea con espacios
+            .replace(/\r/g, '')            // Remover retornos de carro
+            .replace(/\t/g, ' ')           // Reemplazar tabs con espacios
+            .replace(/\s+/g, ' ')          // Normalizar espacios múltiples
+            .replace(/[^\x20-\x7E\u00A0-\u00FF\u0100-\u017F\u0180-\u024F]/g, '') // Remover caracteres especiales problemáticos
+            .trim();
+    }
+    
+    // Función para extraer descripción limpia
+    function extractCleanDescription(detailedDescription, productName) {
+        if (!detailedDescription) {
+            return `${productName} de EverGreen Life. Producto de alta calidad.`;
+        }
+        
+        // Remover JavaScript y código HTML - versión mejorada
+        let cleanDesc = detailedDescription
+            .replace(/\/\/.*$/gm, '')       // Remover comentarios JS
+            .replace(/require\([\s\S]*?\)\s*;?\s*/g, '') // Remover require statements
+            .replace(/\$\([\s\S]*?\)\s*;?\s*/g, '')    // Remover jQuery
+            .replace(/function[\s\S]*?\{[\s\S]*?\}/g, '') // Remover funciones
+            .replace(/alert\([\s\S]*?\)\s*;?\s*/g, '') // Remover alerts
+            .replace(/window\.[\s\S]*?;/g, '') // Remover window calls
+            .replace(/document\.[\s\S]*?;/g, '') // Remover document calls
+            .replace(/<script[\s\S]*?<\/script>/gi, '') // Remover tags script
+            .replace(/<[^>]*>/g, '')          // Remover HTML tags
+            .replace(/Descripción\s*/i, '') // Remover "Descripción"
+            .replace(/Compartir producto[\s\S]*$/i, '') // Remover contenido de compartir
+            .replace(/^\s+/gm, '') // Remover espacios al inicio de líneas
+            .replace(/\s+/g, ' ') // Normalizar espacios
+            .trim();
+            
+        // Extraer solo la primera parte descriptiva (antes de secciones específicas)
+        // Solo cortar si las palabras aparecen como títulos de sección, no en medio del texto
+        const objectivesPattern = /\s+objetivos\s+/i;
+        const methodsPattern = /\s+métodos de uso\s+/i;
+        const ingredientsPattern = /\s+ingredientes\s+/i;
+        
+        // Solo cortar si encuentra el patrón después de un mínimo de caracteres (evita cortes prematuros)
+        const minLength = 200;
+        
+        if (cleanDesc.length > minLength) {
+            const restOfText = cleanDesc.substring(minLength);
+            
+            if (objectivesPattern.test(restOfText)) {
+                const match = restOfText.search(objectivesPattern);
+                cleanDesc = cleanDesc.substring(0, minLength + match).trim();
+            }
+            
+            if (methodsPattern.test(restOfText)) {
+                const match = restOfText.search(methodsPattern);
+                cleanDesc = cleanDesc.substring(0, minLength + match).trim();
+            }
+            
+            if (ingredientsPattern.test(restOfText)) {
+                const match = restOfText.search(ingredientsPattern);
+                cleanDesc = cleanDesc.substring(0, minLength + match).trim();
+            }
+        }
+        
+        // Si queda muy poco texto o está vacío, usar descripción por defecto
+        if (cleanDesc.length < 50) {
+            return `${productName} de EverGreen Life. Producto de alta calidad.`;
+        }
+        
+        // Truncar si es muy largo y limpiar
+        if (cleanDesc.length > 200) {
+            // Encontrar el final de la oración más cercano después de 150 chars
+            let cutPoint = 200;
+            const punctuation = ['.', '!', '?', ':', ';'];
+            
+            // Buscar puntuación entre 150 y 250 caracteres
+            for (let i = 150; i < Math.min(cleanDesc.length, 250); i++) {
+                if (punctuation.includes(cleanDesc[i])) {
+                    cutPoint = i + 1;
+                    break;
+                }
+            }
+            
+            // Si no encuentra puntuación, buscar espacio después de 180 chars
+            if (cutPoint === 200) {
+                for (let i = 180; i < Math.min(cleanDesc.length, 220); i++) {
+                    if (cleanDesc[i] === ' ') {
+                        cutPoint = i;
+                        break;
+                    }
+                }
+            }
+            
+            cleanDesc = cleanDesc.substring(0, cutPoint);
+            
+            // Agregar puntos suspensivos si no termina en puntuación
+            if (cutPoint < cleanDesc.length && !punctuation.includes(cleanDesc[cleanDesc.length - 1])) {
+                cleanDesc += '...';
+            }
+        }
+        
+        return cleanTextForYAML(cleanDesc);
+    }
+    
+    // Función para extraer contenido de secciones específicas
+    function extractSection(detailedDescription, sectionName) {
+        if (!detailedDescription || typeof detailedDescription !== 'string') return '';
+        
+        const lowerDesc = detailedDescription.toLowerCase();
+        const sectionStart = lowerDesc.indexOf(sectionName.toLowerCase());
+        
+        if (sectionStart === -1) return '';
+        
+        let content = detailedDescription.substring(sectionStart + sectionName.length);
+        
+        // Buscar el final de la sección (próxima sección o palabra clave)
+        const endMarkers = ['objetivos', 'métodos de uso', 'ingredientes', 'advertencias', 'compartir'];
+        let endIndex = content.length;
+        
+        for (const marker of endMarkers) {
+            const markerIndex = content.toLowerCase().indexOf(marker);
+            if (markerIndex !== -1 && markerIndex < endIndex) {
+                endIndex = markerIndex;
+            }
+        }
+        
+        content = content.substring(0, endIndex).trim();
+        
+        // Limpiar contenido
+        content = content
+            .replace(/\/\/.*$/gm, '')
+            .replace(/require\(.*?\)/g, '')
+            .replace(/\$\(.*?\)/g, '')
+            .replace(/<.*?>/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+            
+        return content.length > 20 ? content : '';
+    }
+    
     // Función para limpiar y filtrar tags
     function cleanTags(tags) {
         if (!Array.isArray(tags)) return [];
@@ -146,10 +287,13 @@ try {
             // Combinar tags limpios con beneficios
             const allTags = [...new Set([...cleanedTags, ...benefits])].slice(0, 5);
             
+            // Limpiar descripción
+            const cleanDescription = extractCleanDescription(product.detailedDescription, product.name);
+            
             // Construir frontmatter
             const frontmatter = [];
-            frontmatter.push(`name: "${product.name.replace(/"/g, '\\"')}"`);
-            frontmatter.push(`description: "${product.name} de EverGreen Life. Producto de alta calidad."`);
+            frontmatter.push(`name: "${cleanTextForYAML(product.name)}"`);
+            frontmatter.push(`description: "${cleanDescription}"`);
             frontmatter.push(`price: "${product.price || '0,00 €'}"`);
             frontmatter.push(`brand: "EverGreen Life"`);
             
@@ -164,62 +308,60 @@ try {
             frontmatter.push(`availability: "${availability}"`);
             frontmatter.push(`inStock: ${inStock}`);
             frontmatter.push(`category: "${category}"`);
-            frontmatter.push(`tags: [${allTags.map(tag => `"${tag}"`).join(', ')}]`);
+            frontmatter.push(`tags: [${allTags.map(tag => `"${cleanTextForYAML(tag)}"`).join(', ')}]`);
             
             if (sizeInfo) {
-                frontmatter.push(`packageSize: "${sizeInfo}"`);
+                frontmatter.push(`packageSize: "${cleanTextForYAML(sizeInfo)}"`);
             }
             
             if (product.sku) {
-                frontmatter.push(`sku: "${product.sku}"`);
+                frontmatter.push(`sku: "${cleanTextForYAML(product.sku)}"`);
             }
             
             frontmatter.push(`createdAt: "${new Date().toISOString()}"`);
-            frontmatter.push(`seoTitle: "${product.name} - EverGreen Life"`);
-            frontmatter.push(`seoDescription: "Compra ${product.name} de EverGreen Life."`);
+            frontmatter.push(`seoTitle: "${cleanTextForYAML(product.name)} - EverGreen Life"`);
+            frontmatter.push(`seoDescription: "Compra ${cleanTextForYAML(product.name)} de EverGreen Life."`);
             
+            // Extraer secciones específicas
+            const objetivos = extractSection(product.detailedDescription, 'objetivos');
+            const metodosUso = extractSection(product.detailedDescription, 'métodos de uso');
             const content = `---
 ${frontmatter.join('\n')}
 ---
 
-# ${product.name}
+# ${cleanTextForYAML(product.name)}
 
-${product.detailedDescription ? 
-  product.detailedDescription.split('\n')[0].replace('Descripción', '').trim() :
-  `${product.name} de EverGreen Life. Producto de alta calidad de la línea ${category}.`
-}
+${cleanDescription}
 
 ## Información del Producto
 
 - **Precio:** ${product.price || '0,00 €'}
 - **Marca:** EverGreen Life
-${product.sku ? `- **SKU:** ${product.sku}` : ''}
+${product.sku ? `- **SKU:** ${cleanTextForYAML(product.sku)}` : ''}
 - **Categoría:** ${category}
-${sizeInfo ? `- **Tamaño:** ${sizeInfo}` : ''}
+${sizeInfo ? `- **Tamaño:** ${cleanTextForYAML(sizeInfo)}` : ''}
 - **Disponibilidad:** ${availability === 'available' ? 'Disponible' : 'No disponible'}
 
 ${product.link ? `[Ver producto en la tienda oficial](${product.link})` : ''}
 
 ${allTags.length > 0 ? `## Características principales
 
-${allTags.map(tag => `- ${tag}`).join('\n')}
+${allTags.map(tag => `- ${cleanTextForYAML(tag)}`).join('\n')}
 ` : ''}
 
-${product.detailedDescription && product.detailedDescription.includes('objetivos') ? `## Objetivos
+${objetivos ? `## Objetivos
 
-${product.detailedDescription.split('objetivos')[1] ? 
-  product.detailedDescription.split('objetivos')[1].split('métodos de uso')[0].trim() : 
-  'Apoyar el bienestar general y la salud.'
-}
+${objetivos}
+` : ''}
+
+${metodosUso ? `## Métodos de uso
+
+${metodosUso}
 ` : ''}
 
 ## Descripción
 
 Este producto forma parte de la línea ${category} de EverGreen Life, reconocida por su calidad y efectividad.
-
-${product.detailedDescription && product.detailedDescription.length > 200 ? 
-  `\n## Información adicional\n\n${product.detailedDescription.substring(0, 500)}...` : ''
-}
 
 ---
 
