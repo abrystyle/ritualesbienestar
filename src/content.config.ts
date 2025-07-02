@@ -15,4 +15,11 @@ const blog = defineCollection({
 	}),
 });
 
-export const collections = { blog };
+
+// Import products collection from its own config
+import { collections as productCollections } from './content/products/config';
+
+export const collections = { 
+	blog,
+	...productCollections
+};

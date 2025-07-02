@@ -19,21 +19,65 @@
 		0 16px 32px rgba(var(--gray), 33%);
 }
 @font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-regular.woff') format('woff');
+	font-family: 'NotoSans';
+	src: url('./fonts/NotoSans-Regular.ttf') format('truetype');
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
 }
 @font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-bold.woff') format('woff');
+	font-family: 'NotoSans';
+	src: url('./fonts/NotoSans-Bold.ttf') format('truetype');
 	font-weight: 700;
 	font-style: normal;
 	font-display: swap;
 }
+@font-face {
+	font-family: 'NotoSans';
+	src: url('./fonts/NotoSans-Thin.ttf') format('truetype');
+	font-weight: 100;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'NotoSans';
+	src: url('./fonts/NotoSans-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'NotoSans';
+	src: url('./fonts/NotoSans-Medium.ttf') format('truetype');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'NotoSans';
+	src: url('./fonts/NotoSans-SemiBold.ttf') format('truetype');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'NotoSans';
+	src: url('./fonts/NotoSans-ExtraBold.ttf') format('truetype');
+	font-weight: 800;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'NotoSans';
+	src: url('./fonts/NotoSans-Black.ttf') format('truetype');
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+
 body {
-	font-family: 'Atkinson', sans-serif;
+	font-family: 'NotoSans';
 	margin: 0;
 	padding: 0;
 	text-align: left;
@@ -46,7 +90,7 @@ body {
 	line-height: 1.7;
 }
 main {
-	width: 720px;
+	width: 1280px;
 	max-width: calc(100% - 2em);
 	margin: auto;
 	padding: 3em 1em;
@@ -64,7 +108,7 @@ h6 {
 /* h1 {
 	font-size: 3.052em;
 } */
-h2 {
+/* h2 {
 	font-size: 2.441em;
 }
 h3 {
@@ -79,19 +123,19 @@ h5 {
 strong,
 b {
 	font-weight: 700;
-}
+} */
 /* a {
 	color: var(--accent);
 }
 a:hover {
 	color: var(--accent);
 } */
-p {
+/* p {
 	margin-bottom: 1em;
 }
 .prose p {
 	margin-bottom: 2em;
-}
+} */
 textarea {
 	width: 100%;
 	font-size: 16px;
