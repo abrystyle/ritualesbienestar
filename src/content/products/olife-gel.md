@@ -5,12 +5,13 @@ price: "29,99 €"
 brand: "EverGreen Life"
 image: "https://www.evergreenlife.it/media/catalog/product/cache/c07dd61d864357977e19899508bed4cf/o/l/olife_gel_agrumi.png"
 productUrl: "https://www.evergreenlife.it/es_es/olife-gel.html"
-availability: "unavailable"
-inStock: false
+availability: "available"
+inStock: true
 category: "Suplementos OLife"
 tags: ["Bienestar", "Antioxidante", "Natural", "Metabolismo", "Premium"]
 packageSize: "35 ml"
-createdAt: "2025-07-09T10:45:10.676Z"
+sku: "024GEL"
+createdAt: "2025-07-09T12:07:06.341Z"
 seoTitle: "OLife® GEL - EverGreen Life"
 seoDescription: "Compra OLife® GEL de EverGreen Life."
 ---
@@ -23,10 +24,10 @@ OLife® Gel es un complemento alimenticio que contiene más del 80% de OLIVUM® 
 
 - **Precio:** 29,99 €
 - **Marca:** EverGreen Life
-
+- **SKU:** 024GEL
 - **Categoría:** Suplementos OLife
 - **Tamaño:** 35 ml
-- **Disponibilidad:** No disponible
+- **Disponibilidad:** Disponible
 
 [Ver producto en la tienda oficial](https://www.evergreenlife.it/es_es/olife-gel.html)
 

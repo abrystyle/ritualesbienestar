@@ -11,7 +11,7 @@ category: "Suplementos OLife"
 tags: ["Bienestar", "Vitaminas", "Minerales", "Nutrición", "Metabolismo"]
 packageSize: "30 g"
 sku: "024SOST"
-createdAt: "2025-07-09T10:45:10.679Z"
+createdAt: "2025-07-09T12:07:06.343Z"
 seoTitle: "OLife® DIET SHAKE - EverGreen Life"
 seoDescription: "Compra OLife® DIET SHAKE de EverGreen Life."
 ---

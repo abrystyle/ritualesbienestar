@@ -1,0 +1,80 @@
+# GitHub Action para actualización automática de productos
+# Archivo: .github/workflows/update-products.yml
+
+name: 🤖 Actualizar Productos EverGreen
+
+on:
+  # Trigger manual
+  workflow_dispatch:
+  
+  # Trigger via webhook desde Netlify Function
+  repository_dispatch:
+    types: [update-products]
+  
+  # Programado diariamente a las 6:00 AM
+  schedule:
+    - cron: '0 6 * * *'
+
+jobs:
+  update-products:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout código
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📦 Instalar dependencias
+      run: npm install
+      
+    - name: 📡 Ejecutar scraping
+      run: node scraper.js
+      env:
+        NODE_ENV: production
+        
+    - name: 📝 Generar archivos Markdown
+      run: node generate_simple.cjs
+      
+    - name: 🔍 Verificar cambios
+      id: verify-changes
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "changes=true" >> $GITHUB_OUTPUT
+          echo "📊 Cambios detectados en archivos"
+        else
+          echo "changes=false" >> $GITHUB_OUTPUT
+          echo "ℹ️ No hay cambios en archivos"
+        fi
+        
+    - name: 💾 Commit y push cambios
+      if: steps.verify-changes.outputs.changes == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "🤖 Actualización automática de productos - $(date -Iseconds)"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: 🚀 Trigger Netlify Build
+      if: steps.verify-changes.outputs.changes == 'true'
+      run: |
+        curl -X POST "${{ secrets.NETLIFY_BUILD_HOOK }}" \
+          -H "Content-Type: application/json" \
+          -d '{"trigger":"github-action-update","timestamp":"'$(date -Iseconds)'"}'
+      env:
+        NETLIFY_BUILD_HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        
+    - name: 📊 Resultado
+      run: |
+        if [ "${{ steps.verify-changes.outputs.changes }}" == "true" ]; then
+          echo "✅ Productos actualizados y sitio rebuildeado"
+        else
+          echo "ℹ️ No había cambios, no se hizo rebuild"
+        fi

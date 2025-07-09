@@ -11,7 +11,7 @@ category: "Proteínas"
 tags: ["Premium"]
 packageSize: "26 g"
 sku: "023SHAKE"
-createdAt: "2025-07-09T10:45:10.682Z"
+createdAt: "2025-07-09T12:07:06.346Z"
 seoTitle: "OLife® PLANT PROTEIN SHAKE - EverGreen Life"
 seoDescription: "Compra OLife® PLANT PROTEIN SHAKE de EverGreen Life."
 ---

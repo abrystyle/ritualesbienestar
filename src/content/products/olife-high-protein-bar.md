@@ -10,7 +10,7 @@ inStock: true
 category: "Proteínas"
 tags: ["Premium", "Salud", "Antioxidante", "Nutritivo"]
 sku: "024HPB"
-createdAt: "2025-07-09T10:45:10.680Z"
+createdAt: "2025-07-09T12:07:06.344Z"
 seoTitle: "OLife® HIGH PROTEIN BAR - EverGreen Life"
 seoDescription: "Compra OLife® HIGH PROTEIN BAR de EverGreen Life."
 ---

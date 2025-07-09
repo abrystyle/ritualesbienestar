@@ -1,0 +1,8 @@
+# SSH Public Key para despliegues automatizados
+# Fecha: 2025-07-09
+# Propósito: Autenticación SSH para servicios de despliegue
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDVCvNVneMHXvjUAKgenS7q8xNlSknm0/BUHe1XO3lOTpgHEn4Jz6Fjc0i/TGbRZPMHaKfh/W0DIaeSVOQ08G9SRu7fKroWDYiD0pacd+9cJzdWPF0iTA5bXox4kqYVinfHPoKZyoLJdZcIUbTflcOPOhNfwTYozPRQHE/ne+mxbTWVbEfoYPd/a1sV6fUzOuYeQER1drGHj6o+CjSkoQV247ikdqgsAdWdWWxl55WUlC3LX3k9pnYQedtzomSCkDOv0rNtCghQA5eIewlRUYcG0C8z9m3LGo7EzH7wlJ7Wge8SBu2c3CBd+hFtiZFyBa4QTQT+1je684wc7ZtLYU2VmPPnknUsiWv73t2OJgAwluNUuiVSxcdJhETlW8gpJstLBKl2+8cmjqaHXhyhLFb6+308XEv2BnEwoXfh7OZGVpg8gDEiO039xkUtdwbEupCjrCG5ZpfRDeoBtaxNU1jEQf69EIYnA0MMBsHb2X2g0QdKiKZQ9lJcsg4q7HrpABhv+n2SNNVcV4cKzW71hUEWZbnqEFeK+Re9B1l+IbykBBEgQ8RFrvTzzKBA0PCAA+p5sj0mNIS+I49xBDf8OixFsbDaItXgSz9RVfl/C95zJT1Ygt/ykXf21cCOEJLIQU+GSCKYQcRfxXvTVSCwZF9owmmtYDbEKF5pFc1rc+Yr0Q==
+
+# NOTA: Esta es una clave PÚBLICA - es segura de compartir
+# NO compartir nunca la clave PRIVADA (archivo sin .pub)

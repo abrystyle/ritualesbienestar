@@ -11,7 +11,7 @@ category: "Tratamientos"
 tags: ["Antioxidante", "Minerales", "Drenante", "Premium", "Vitalidad"]
 packageSize: "1 g"
 sku: "25BEN3"
-createdAt: "2025-07-09T10:45:10.685Z"
+createdAt: "2025-07-09T12:07:06.349Z"
 seoTitle: "OLife® BENDE DRENANTI - EverGreen Life"
 seoDescription: "Compra OLife® BENDE DRENANTI de EverGreen Life."
 ---
