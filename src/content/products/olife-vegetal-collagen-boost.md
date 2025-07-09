@@ -11,7 +11,7 @@ category: "Colágeno"
 tags: ["Natural", "Salud", "Proteína", "Premium", "Colágeno"]
 packageSize: "10 g"
 sku: "024VEGCOLL"
-createdAt: "2025-07-02T12:36:16.033Z"
+createdAt: "2025-07-09T10:45:10.673Z"
 seoTitle: "OLife® VEGETAL COLLAGEN BOOST - EverGreen Life"
 seoDescription: "Compra OLife® VEGETAL COLLAGEN BOOST de EverGreen Life."
 ---
@@ -56,4 +56,4 @@ Este producto forma parte de la línea Colágeno de EverGreen Life, reconocida p
 
 ---
 
-*Información extraída automáticamente el 2/7/2025*
+*Información extraída automáticamente el 9/7/2025*

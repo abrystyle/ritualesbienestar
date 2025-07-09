@@ -10,7 +10,7 @@ inStock: false
 category: "Colágeno"
 tags: ["Bienestar", "Suplemento", "Premium", "Salud", "Colágeno"]
 packageSize: "150 ml"
-createdAt: "2025-07-02T12:36:16.044Z"
+createdAt: "2025-07-09T10:45:10.682Z"
 seoTitle: "OLife® COLLAGENE IDROLIZZATO - EverGreen Life"
 seoDescription: "Compra OLife® COLLAGENE IDROLIZZATO de EverGreen Life."
 ---
@@ -55,4 +55,4 @@ Este producto forma parte de la línea Colágeno de EverGreen Life, reconocida p
 
 ---
 
-*Información extraída automáticamente el 2/7/2025*
+*Información extraída automáticamente el 9/7/2025*

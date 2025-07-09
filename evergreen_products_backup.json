@@ -1,0 +1,28 @@
+{
+  "url": "https://test.example.com",
+  "scrapedAt": "2025-07-09T10:51:14.436Z",
+  "totalProducts": 3,
+  "products": [
+    {
+      "id": 1,
+      "name": "Producto Test 1",
+      "price": "29,99 €",
+      "availability": null,
+      "sku": "TEST001"
+    },
+    {
+      "id": 2,
+      "name": "Producto Test 2",
+      "price": "39,99 €",
+      "availability": "No está disponible",
+      "sku": "TEST002"
+    },
+    {
+      "id": 3,
+      "name": "Producto Test 3",
+      "price": "49,99 €",
+      "availability": null,
+      "sku": "TEST003"
+    }
+  ]
+}

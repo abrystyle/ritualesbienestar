@@ -77,15 +77,86 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Verificar si hay productos actualizados
+    // Verificar si hay productos actualizados y analizar cambios de stock
     let productsCount = 0;
+    let stockChanges = [];
+    let shouldTriggerBuild = false;
+    
     try {
       if (fs.existsSync('evergreen_products.json')) {
         const productsData = JSON.parse(fs.readFileSync('evergreen_products.json', 'utf8'));
         productsCount = productsData.products ? productsData.products.length : 0;
+        
+        // Comparar con backup anterior para detectar cambios de stock
+        const backupFile = 'evergreen_products_backup.json';
+        if (fs.existsSync(backupFile)) {
+          try {
+            const previousData = JSON.parse(fs.readFileSync(backupFile, 'utf8'));
+            const previousProducts = previousData.products || [];
+            const currentProducts = productsData.products || [];
+            
+            // Detectar cambios específicos de stock/availability
+            currentProducts.forEach(product => {
+              const previous = previousProducts.find(prev => 
+                (prev.sku && prev.sku === product.sku) || prev.name === product.name
+              );
+              
+              if (previous) {
+                if (previous.availability !== product.availability ||
+                    previous.price !== product.price ||
+                    JSON.stringify(previous.tags) !== JSON.stringify(product.tags)) {
+                  
+                  stockChanges.push({
+                    name: product.name,
+                    sku: product.sku,
+                    previousStock: previous.availability,
+                    currentStock: product.availability,
+                    priceChanged: previous.price !== product.price,
+                    stockChanged: previous.availability !== product.availability
+                  });
+                  
+                  // Stock change is critical
+                  if (previous.availability !== product.availability) {
+                    shouldTriggerBuild = true;
+                  }
+                }
+              }
+            });
+            
+            console.log(`📊 Cambios detectados: ${stockChanges.length} productos`);
+            if (stockChanges.length > 0) {
+              console.log('🔄 Productos con cambios:', stockChanges.map(c => `${c.name}${c.stockChanged ? ' (STOCK)' : ''}`).join(', '));
+            }
+            
+          } catch (error) {
+            console.log('⚠️ No se pudo comparar con backup anterior');
+          }
+        }
+        
+        // Crear nuevo backup
+        fs.writeFileSync('evergreen_products_backup.json', JSON.stringify(productsData, null, 2));
       }
     } catch (error) {
       console.log('⚠️ No se pudo leer el archivo de productos');
+    }
+
+    // Si hay cambios críticos de stock, triggear build automáticamente
+    if (shouldTriggerBuild && process.env.NETLIFY_BUILD_HOOK) {
+      console.log('🚀 Cambios críticos detectados, triggeando build...');
+      try {
+        const buildResult = await triggerNetlifyBuild(process.env.NETLIFY_BUILD_HOOK);
+        results.autoBuild = {
+          triggered: true,
+          reason: 'Cambios críticos de stock detectados',
+          result: buildResult
+        };
+      } catch (error) {
+        console.log('⚠️ Error triggeando build automático:', error.message);
+        results.autoBuild = {
+          triggered: false,
+          error: error.message
+        };
+      }
     }
 
     const endTime = Date.now();
@@ -96,9 +167,11 @@ exports.handler = async (event, context) => {
       timestamp: new Date().toISOString(),
       duration: `${duration}ms`,
       productsCount,
+      stockChanges: stockChanges.length,
+      autoBuildTriggered: shouldTriggerBuild,
       results,
       message: results.errors.length === 0 
-        ? `Actualización exitosa: ${productsCount} productos procesados`
+        ? `Actualización exitosa: ${productsCount} productos procesados${stockChanges.length > 0 ? `, ${stockChanges.length} cambios detectados` : ''}`
         : `Actualización con errores: ${results.errors.join(', ')}`
     };
 
@@ -130,3 +203,47 @@ exports.handler = async (event, context) => {
     };
   }
 };
+
+// Función auxiliar para triggear builds en Netlify
+async function triggerNetlifyBuild(buildHookUrl) {
+  const https = require('https');
+  
+  return new Promise((resolve, reject) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const req = https.request(buildHookUrl, options, (res) => {
+      let data = '';
+      
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve({
+            statusCode: res.statusCode,
+            response: data
+          });
+        } else {
+          reject(new Error(`Build hook falló con status ${res.statusCode}: ${data}`));
+        }
+      });
+    });
+
+    req.on('error', (error) => {
+      reject(error);
+    });
+
+    req.write(JSON.stringify({
+      trigger: 'auto-stock-update',
+      timestamp: new Date().toISOString()
+    }));
+    
+    req.end();
+  });
+}

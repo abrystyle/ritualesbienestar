@@ -10,7 +10,7 @@ inStock: true
 category: "Quema Grasas"
 tags: ["Salud", "Metabolismo", "Premium", "Energía", "Bienestar"]
 sku: "024BRUU"
-createdAt: "2025-07-02T12:36:16.042Z"
+createdAt: "2025-07-09T10:45:10.681Z"
 seoTitle: "OLife® BRUCIA GRASSI | Trattamento Urto - EverGreen Life"
 seoDescription: "Compra OLife® BRUCIA GRASSI | Trattamento Urto de EverGreen Life."
 ---
@@ -52,4 +52,4 @@ Este producto forma parte de la línea Quema Grasas de EverGreen Life, reconocid
 
 ---
 
-*Información extraída automáticamente el 2/7/2025*
+*Información extraída automáticamente el 9/7/2025*

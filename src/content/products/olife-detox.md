@@ -11,7 +11,7 @@ category: "Suplementos OLife"
 tags: ["Bienestar", "Natural", "Salud", "Detox", "Premium"]
 packageSize: "5 ml"
 sku: "024DETOX"
-createdAt: "2025-07-02T12:36:16.045Z"
+createdAt: "2025-07-09T10:45:10.683Z"
 seoTitle: "OLife® DETOX - EverGreen Life"
 seoDescription: "Compra OLife® DETOX de EverGreen Life."
 ---
@@ -56,4 +56,4 @@ Este producto forma parte de la línea Suplementos OLife de EverGreen Life, reco
 
 ---
 
-*Información extraída automáticamente el 2/7/2025*
+*Información extraída automáticamente el 9/7/2025*

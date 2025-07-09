@@ -11,7 +11,7 @@ category: "Suplementos Premium"
 tags: ["Bienestar", "Natural", "Vitaminas", "Premium", "Energía"]
 packageSize: "20 ml"
 sku: "024GOLD"
-createdAt: "2025-07-02T12:36:16.019Z"
+createdAt: "2025-07-09T10:45:10.660Z"
 seoTitle: "OLife® GOLDEN DAY - EverGreen Life"
 seoDescription: "Compra OLife® GOLDEN DAY de EverGreen Life."
 ---
@@ -56,4 +56,4 @@ Este producto forma parte de la línea Suplementos Premium de EverGreen Life, re
 
 ---
 
-*Información extraída automáticamente el 2/7/2025*
+*Información extraída automáticamente el 9/7/2025*

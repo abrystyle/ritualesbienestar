@@ -10,7 +10,7 @@ inStock: true
 category: "Quema Grasas"
 tags: ["Metabolismo", "Premium", "Energía", "Bienestar", "Salud"]
 sku: "024BRUG"
-createdAt: "2025-07-02T12:36:16.041Z"
+createdAt: "2025-07-09T10:45:10.680Z"
 seoTitle: "OLife® BRUCIA GRASSI | Trattamento Giorno - EverGreen Life"
 seoDescription: "Compra OLife® BRUCIA GRASSI | Trattamento Giorno de EverGreen Life."
 ---
@@ -55,4 +55,4 @@ Este producto forma parte de la línea Quema Grasas de EverGreen Life, reconocid
 
 ---
 
-*Información extraída automáticamente el 2/7/2025*
+*Información extraída automáticamente el 9/7/2025*

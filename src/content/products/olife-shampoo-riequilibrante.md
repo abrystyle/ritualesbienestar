@@ -10,7 +10,7 @@ inStock: true
 category: "Suplementos OLife"
 tags: ["Antioxidante", "Natural", "Salud", "Premium"]
 sku: "024SHAMPOO"
-createdAt: "2025-07-02T12:36:16.050Z"
+createdAt: "2025-07-09T10:45:10.688Z"
 seoTitle: "OLife® SHAMPOO RIEQUILIBRANTE - EverGreen Life"
 seoDescription: "Compra OLife® SHAMPOO RIEQUILIBRANTE de EverGreen Life."
 ---
@@ -54,4 +54,4 @@ Este producto forma parte de la línea Suplementos OLife de EverGreen Life, reco
 
 ---
 
-*Información extraída automáticamente el 2/7/2025*
+*Información extraída automáticamente el 9/7/2025*
