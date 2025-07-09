@@ -110,12 +110,44 @@ exports.handler = async (event, context) => {
           !previousIds.has(p.sku || p.name)
         ).length;
         
-        dailyResults.summary.updatedProducts = currentProducts.filter(p => {
+        // Analizar cambios incluyendo stock/availability
+        const changedProducts = currentProducts.filter(p => {
           const previous = previousProducts.find(prev => 
             (prev.sku && prev.sku === p.sku) || prev.name === p.name
           );
-          return previous && (previous.price !== p.price || JSON.stringify(previous.tags) !== JSON.stringify(p.tags));
-        }).length;
+          
+          if (!previous) return false;
+          
+          // Verificar cambios en campos críticos
+          const priceChanged = previous.price !== p.price;
+          const tagsChanged = JSON.stringify(previous.tags) !== JSON.stringify(p.tags);
+          const stockChanged = previous.availability !== p.availability;
+          const imageChanged = previous.image !== p.image;
+          const descriptionChanged = previous.description !== p.description;
+          
+          return priceChanged || tagsChanged || stockChanged || imageChanged || descriptionChanged;
+        });
+        
+        dailyResults.summary.updatedProducts = changedProducts.length;
+        
+        // Log detallado de cambios
+        if (changedProducts.length > 0) {
+          console.log('🔄 Productos con cambios detectados:');
+          changedProducts.forEach(product => {
+            const previous = previousProducts.find(prev => 
+              (prev.sku && prev.sku === product.sku) || prev.name === product.name
+            );
+            
+            const changes = [];
+            if (previous.price !== product.price) changes.push(`precio: ${previous.price} → ${product.price}`);
+            if (previous.availability !== product.availability) changes.push(`stock: ${previous.availability} → ${product.availability}`);
+            if (JSON.stringify(previous.tags) !== JSON.stringify(product.tags)) changes.push('tags modificados');
+            if (previous.image !== product.image) changes.push('imagen actualizada');
+            if (previous.description !== product.description) changes.push('descripción actualizada');
+            
+            console.log(`  📦 ${product.name}: ${changes.join(', ')}`);
+          });
+        }
         
         console.log(`📊 Productos procesados: ${dailyResults.summary.productsProcessed}`);
         console.log(`🆕 Productos nuevos: ${dailyResults.summary.newProducts}`);

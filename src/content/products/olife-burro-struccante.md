@@ -10,7 +10,7 @@ inStock: true
 category: "Suplementos OLife"
 tags: ["Vitaminas", "Premium", "Salud"]
 sku: "024BUR"
-createdAt: "2025-07-02T12:36:16.047Z"
+createdAt: "2025-07-09T10:45:10.685Z"
 seoTitle: "OLife® BURRO STRUCCANTE - EverGreen Life"
 seoDescription: "Compra OLife® BURRO STRUCCANTE de EverGreen Life."
 ---
@@ -53,4 +53,4 @@ Este producto forma parte de la línea Suplementos OLife de EverGreen Life, reco
 
 ---
 
-*Información extraída automáticamente el 2/7/2025*
+*Información extraída automáticamente el 9/7/2025*

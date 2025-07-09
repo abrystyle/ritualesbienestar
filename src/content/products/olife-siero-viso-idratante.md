@@ -10,7 +10,7 @@ inStock: true
 category: "Serums"
 tags: ["Antioxidante", "Hidratante", "Premium"]
 sku: "024SIERO"
-createdAt: "2025-07-02T12:36:16.049Z"
+createdAt: "2025-07-09T10:45:10.687Z"
 seoTitle: "OLife® SIERO VISO IDRATANTE - EverGreen Life"
 seoDescription: "Compra OLife® SIERO VISO IDRATANTE de EverGreen Life."
 ---
@@ -53,4 +53,4 @@ Este producto forma parte de la línea Serums de EverGreen Life, reconocida por 
 
 ---
 
-*Información extraída automáticamente el 2/7/2025*
+*Información extraída automáticamente el 9/7/2025*

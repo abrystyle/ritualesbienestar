@@ -11,7 +11,7 @@ inStock: true
 category: "Kits"
 tags: ["Premium"]
 sku: "KITVIP-ES"
-createdAt: "2025-07-02T12:36:16.035Z"
+createdAt: "2025-07-09T10:45:10.674Z"
 seoTitle: "KIT VIP - EverGreen Life"
 seoDescription: "Compra KIT VIP de EverGreen Life."
 ---
@@ -47,4 +47,4 @@ Este producto forma parte de la línea Kits de EverGreen Life, reconocida por su
 
 ---
 
-*Información extraída automáticamente el 2/7/2025*
+*Información extraída automáticamente el 9/7/2025*
