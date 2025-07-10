@@ -85,6 +85,7 @@ console.log('Productos por categoría:', Object.fromEntries(
                             {product.data.image && (
                                 <div class="aspect-square overflow-hidden">
                                     <img
+                                        transition:name={`img-${product.data.name}`}
                                         src={product.data.image}
                                         alt={product.data.name}
                                         class="w-full h-full max-w-[224px] object-cover hover:scale-105 transition-transform duration-300"
